@@ -11,3 +11,6 @@ bun init
 # run index.js by
 
 bun run index.js
+
+<!-- We will use 'readLine (built-in Node.js module)
+ To do chat in terminal -->
