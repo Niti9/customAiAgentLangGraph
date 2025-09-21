@@ -95,3 +95,13 @@ HumanMessage {
 }
 ],
 }
+
+# 1. Setup ToolCalling
+
+# Generate api key by Tavily for WebSearch or Internet Access at realtime
+
+// Paste into .env file
+
+# Installed tavily package
+
+bun add @langchain/tavily
