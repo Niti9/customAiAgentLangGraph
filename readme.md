@@ -105,3 +105,9 @@ HumanMessage {
 # Installed tavily package
 
 bun add @langchain/tavily
+
+# 2. Add Memory
+
+# To add Memory or we can say to share context to AI agent of previous question and responses
+
+// we will use MemorySaver package from langGraph

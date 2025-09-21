@@ -3,6 +3,10 @@ import { MessagesAnnotation, StateGraph } from "@langchain/langgraph";
 import { ToolNode } from "@langchain/langgraph/prebuilt";
 import readLine from "node:readline/promises";
 import { TavilySearch } from "@langchain/tavily";
+import { MemorySaver } from "@langchain/langgraph";
+
+//Not Good for Production we required Database in production because it cleans when server down
+const checkpointer = new MemorySaver();
 
 const tool = new TavilySearch({
   maxResults: 3,
@@ -71,7 +75,7 @@ const workflow = new StateGraph(MessagesAnnotation)
   .addConditionalEdges("agent", shouldContinue);
 
 /** Compile the Graph */
-const app = workflow.compile();
+const app = workflow.compile({ checkpointer });
 
 async function main() {
   // Created Interface for input and output of chat
@@ -86,9 +90,12 @@ async function main() {
 
     if (userInput === "bye") break;
 
-    const finalState = await app.invoke({
-      messages: [{ role: "user", content: userInput }],
-    });
+    const finalState = await app.invoke(
+      {
+        messages: [{ role: "user", content: userInput }],
+      },
+      { configurable: { thread_id: "1" } } // thread Id is like conversation id for now it's hardcoded
+    );
 
     const lastMessage = finalState.messages[finalState.messages.length - 1];
     // console.log("Final->> ", finalState);
